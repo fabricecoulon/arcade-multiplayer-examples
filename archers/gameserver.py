@@ -6,10 +6,10 @@ import random
 from common.protocol import EndpointHelper, RPCProtocol
 from common.helpers import MOVE_MAP, apply_movement, MeasureDuration
 from common.vector2 import Vector2
-from common.datacls import PlayerData, GameData, Event
+from common.datacls import PlayerData, GameData, Event, ProjectileData
 from dataclasses import asdict
 from collections import deque
-from common.helpers import TOPIC_NEWPLAYER
+from common.helpers import TOPIC_NEWPLAYER, PROJECTILE
 
 LOG = logging.getLogger('gameserver')
 
@@ -109,10 +109,13 @@ class RPCServerProtocol(RPCProtocol):
         return asdict(self.gs_state.game_state)
 
     def rpc_ff_process_client_events(self, sender, data):
-        if self.gs_state is None:
-            raise
-        print(data)
-
+        if self.gs_state is None or not data['params'][0]:
+            raise RuntimeError('Not supposed to happend')
+        obj_meta_data = data['params'][0]
+        #print(obj_meta_data)
+        if obj_meta_data['klass'] == PROJECTILE:
+            projectile = ProjectileData(**obj_meta_data['obj_as_dict'])
+            print(projectile)
 
 class ServerState:
     def __init__(self, game_state):

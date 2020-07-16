@@ -13,6 +13,7 @@ from common.helpers import ROOT_PLAYER_ID, TOPIC_GSUPDATE, TOPIC_NEWPLAYER
 from common.helpers import FACE_RIGHT, FACE_LEFT, FACE_UP, FACE_DOWN
 from common.helpers import TOPIC_PLAYERX_WEAPON_OUT, TOPIC_PLAYERX_WEAPON_SHOOT
 from common.helpers import TOPIC_PLAYERX_FIRE_WEAPON
+from common.helpers import PROJECTILE
 from common.datacls import Event
 
 
@@ -214,9 +215,9 @@ class ArcadeGame(arcade.Window):
         projectile.src_player_id = _src_player_id
         self.cgamedata.projectiles.append(projectile)
 
-        #_event = Event(Event.get_new_id(),ts=time.time(), topic=TOPIC_PLAYERX_FIRE_WEAPON % _src_player_id)
-        #_event.params = (_src_player_id,)
-        #self.client_eventq.append(_event)
+        _event = Event(Event.get_new_id(),ts=time.time(), topic=TOPIC_PLAYERX_FIRE_WEAPON % _src_player_id,
+                        params=({'src': _src_player_id, 'klass': PROJECTILE, 'obj_as_dict': projectile.to_dict()},))
+        self.client_eventq.append(_event)
 
     def on_key_press(self, key, key_modifiers):
         if key in MOVE_MAP:

@@ -26,6 +26,8 @@ MOVE_MAP = {
     arcade.key.RIGHT: Vector2(1, 0),
 }
 
+# Client event to server object
+PROJECTILE = 10  # 'ProjectileData'
 
 @dataclass
 class KeysPressed:
